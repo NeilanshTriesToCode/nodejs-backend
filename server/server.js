@@ -25,3 +25,15 @@ app.use(express.json());
 // i.e. enables the routes defined in the JS file to be accessible
 app.use(require('./routes/record'));
 
+// connect to mongodb driver
+const dbo = require("./db/conn");
+
+app.listen(port, () => {
+    dbo.connectToServer(err => {
+        if(err){
+            console.log(err);
+        }
+    });
+    console.log(`Server is up and running on port ${port}`);
+});
+

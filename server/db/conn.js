@@ -11,24 +11,21 @@ const client = new MongoClient(DB, {
 
 var db;
 
-// export DB connection object
-/* export includes 2 items:
-    1. connectToServer(): function to connect to the database
-    2. getCollection(): function to return Collection named "mflix" from the database
-*/
-module.exports = {
-    connectToServer: (callback) => {
-        client.connect((err, database) => {
-            if(database){
-                // load Sample Collection named "sampled_mflix"
-                db = database('sample_mflix');
-                console.log('Connected to database successfully.')
-            }
+// function to connect to the database
+export const connectToServer = (callback) => {
+    client.connect((err, database) => {
+        if(database){
+            // load Sample Collection named "sampled_mflix"
+            db = database('sample_mflix');
+            console.log('Connected to database successfully.')
+        }
 
-            return callback(err);
-        });
-    },
-    getCollection: () => {
-        return db;
-    }
+        return callback(err);
+
+    });
+}
+
+// function to return Collection named "mflix" from the database
+export const getCollection = () => {
+    return db;
 }
