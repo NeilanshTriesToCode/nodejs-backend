@@ -1,31 +1,28 @@
 // file to connect to the MongoDB database
 // basically contains the code to connect to the MongoDB database and could be used in server.js
-import { MongoClient } from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-const DB = process.env.ATLAS_URI;
+const url = process.env.ATLAS_URI;
 
-const client = new MongoClient(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+const client = new MongoClient(url);
 
 var db;
 
 // function to connect to the database
-export const connectToServer = (callback) => {
-    client.connect((err, database) => {
-        if(database){
-            // load Sample Collection named "sampled_mflix"
-            db = database('sample_mflix');
-            console.log('Connected to database successfully.')
-        }
+export const connectToServer = async () => {
+    await client.connect();
 
-        return callback(err);
-
+    await client.db('sample_mflix').command({ ping: 1 })
+    .then(() => {
+        console.log('Connected to the database.');
+    })
+    .catch(err => {
+        console.log(err);
     });
+    
 }
 
-// function to return Collection named "mflix" from the database
-export const getCollection = () => {
+// function to return DB named "mflix" from the database
+export const getDB = () => {
     return db;
 }
