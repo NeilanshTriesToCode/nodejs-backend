@@ -9,6 +9,7 @@ const moviesRouter = express.Router();
 // route to retrieve all movies
 moviesRouter.route('/movies').get((req, res) => {
     let moviesDb = getDB();
+    console.log(moviesDb)
 
     moviesDb.collection('movies')
         .find({})

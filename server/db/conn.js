@@ -12,13 +12,15 @@ var db;
 export const connectToServer = async () => {
     await client.connect();
 
-    await client.db('sample_mflix').command({ ping: 1 })
-    .then(() => {
-        console.log('Connected to the database.');
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    db = client.db('sample_mflix');
+
+    if(db){
+        console.log('Connected to database.');
+        return;
+    }
+    else{
+        throw new Error('Error: Couldn\'t connect to database.');
+    }
     
 }
 
