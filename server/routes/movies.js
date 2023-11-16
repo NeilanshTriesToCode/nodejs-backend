@@ -1,10 +1,10 @@
 // file containing API endpoints
 // this will have the code concerneed with the "movies" route
 import express from 'express';
-import { connectToServer, getDB } from '../db/conn.js';
+import { getDB } from '../db/conn.js';
 
 // defining movies route
-const moviesRouter = express.Router();
+export const moviesRouter = express.Router();
 
 // route to retrieve all movies
 moviesRouter.route('/movies').get((req, res) => {
@@ -24,5 +24,4 @@ moviesRouter.route('/movies').get((req, res) => {
         })
 });
 
-export default moviesRouter;
 

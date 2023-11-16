@@ -4,7 +4,7 @@ import cors from 'cors';
 import 'dotenv/config';
 
 import { connectToServer } from "./db/conn.js";
-import moviesRouter from './routes/movies.js';
+import { moviesRouter } from './routes/movies.js';
 
 const app = express();
 
@@ -24,16 +24,17 @@ app.use(json());
 
 // allows app to include routes defined in the record JS file
 // i.e. enables the routes defined in the JS file to be accessible
-app.use(moviesRouter);
+app.use('/movies', moviesRouter);
 
 
 app.listen(port, () => {
-    // connect to mongodb driver
+    // custom function to connect to mongodb driver
     connectToServer(err => {
         if(err){
             console.log(err);
         }
     });
+
     console.log(`Server is up and running on port ${port}`);
 });
-
+ 
