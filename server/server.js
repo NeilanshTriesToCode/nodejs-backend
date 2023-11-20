@@ -24,17 +24,17 @@ app.use(express.json());
 
 // allows app to include routes defined in the record JS file
 // i.e. enables the routes defined in the JS file to be accessible
-app.use('/movies', moviesRouter);
+app.use(moviesRouter);
 
 
 app.listen(port, () => {
+    console.log(`Server is up and running on port ${port}`);
+    
     // custom function to connect to mongodb driver
     dbo.connectToServer(err => {
         if(err){
             console.log(err);
         }
     });
-
-    console.log(`Server is up and running on port ${port}`);
 });
  

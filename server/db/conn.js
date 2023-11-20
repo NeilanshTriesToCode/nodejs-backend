@@ -2,15 +2,15 @@
 // basically contains the code to connect to the MongoDB database and could be used in server.js
 const { MongoClient } = require('mongodb');
 
-const url = process.env.ATLAS_URI;
+const url = process.env.ATLAS_URL;
 
 const client = new MongoClient(url);
 
 var db;
 
 // function to connect to the database
-const connectToServer = async () => {
-    await client.connect();
+const connectToServer = () => {
+    client.connect();
 
     db = client.db('sample_mflix');
 
@@ -26,8 +26,8 @@ const connectToServer = async () => {
 
 // function to return DB named "mflix" from the database
 const getDB = () => {
-    console.log(db)
-    return 3;
+    //console.log(db)
+    return db;
 }
 
 module.exports = {

@@ -9,23 +9,24 @@ const moviesRouter = express.Router();
 const dbo = require('../db/conn');
 
 // route to retrieve all movies
-moviesRouter.route('/movies').get((req, res) => {
-    let moviesDb = dbo.getDB();
-    console.log(moviesDb)
+moviesRouter.get('/movies', (req, res) => {
+    res.send('hello client');
+    // let moviesDb = dbo.getDB();
+    // console.log(moviesDb)
 
-    res.send('hello');
+    // res.send('hello');
 
-    moviesDb.collection('movies')
-        .find({})
-        .toArray((err, result) => {
-            if(err){
-                console.log(err);
-                throw err;
-            }
+    // moviesDb.collection('movies')
+    //     .find({})
+    //     .toArray((err, result) => {
+    //         if(err){
+    //             console.log(err);
+    //             throw err;
+    //         }
 
-            res.send('hello');
-            console.log('hello');
-        })
+    //         res.send('hello');
+    //         console.log('hello');
+    //     })
 });
 
 module.exports = moviesRouter;
