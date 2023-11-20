@@ -2,7 +2,7 @@
 // basically contains the code to connect to the MongoDB database and could be used in server.js
 const { MongoClient } = require('mongodb');
 
-const url = 'mongodb+srv://neilansh:backend123@nodejs-backend.evpmp9c.mongodb.net/?retryWrites=true&w=majority';
+const url = process.env.ATLAS_URI;
 
 const client = new MongoClient(url);
 
