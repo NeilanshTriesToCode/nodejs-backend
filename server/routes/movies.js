@@ -1,15 +1,19 @@
 // file containing API endpoints
 // this will have the code concerneed with the "movies" route
-import express from 'express';
-import { getDB } from '../db/conn.js';
+const express = require('express');
 
 // defining movies route
-export const moviesRouter = express.Router();
+const moviesRouter = express.Router();
+
+// import items from conn.js
+const dbo = require('../db/conn');
 
 // route to retrieve all movies
 moviesRouter.route('/movies').get((req, res) => {
-    let moviesDb = getDB();
+    let moviesDb = dbo.getDB();
     console.log(moviesDb)
+
+    res.send('hello');
 
     moviesDb.collection('movies')
         .find({})
@@ -19,9 +23,11 @@ moviesRouter.route('/movies').get((req, res) => {
                 throw err;
             }
 
-            res.json(result);
-            console.log(res.json(result));
+            res.send('hello');
+            console.log('hello');
         })
 });
+
+module.exports = moviesRouter;
 
 

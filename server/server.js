@@ -1,10 +1,10 @@
 // file for the main server code
-import express, { json } from 'express';
-import cors from 'cors';
-import 'dotenv/config';
+const express = require('express');
+const cors = require('cors');
+require("dotenv").config();
 
-import { connectToServer } from "./db/conn.js";
-import { moviesRouter } from './routes/movies.js';
+const dbo = require('./db/conn');
+const moviesRouter = require('./routes/movies');
 
 const app = express();
 
@@ -20,7 +20,7 @@ to be attached to req.body.
 So when the client request sends data in JSON, it could
 then be accessed using req.body
 */
-app.use(json());
+app.use(express.json());
 
 // allows app to include routes defined in the record JS file
 // i.e. enables the routes defined in the JS file to be accessible
@@ -29,7 +29,7 @@ app.use('/movies', moviesRouter);
 
 app.listen(port, () => {
     // custom function to connect to mongodb driver
-    connectToServer(err => {
+    dbo.connectToServer(err => {
         if(err){
             console.log(err);
         }
