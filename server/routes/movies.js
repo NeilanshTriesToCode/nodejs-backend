@@ -9,24 +9,30 @@ const moviesRouter = express.Router();
 const dbo = require('../db/conn');
 
 // route to retrieve all movies
-moviesRouter.get('/movies', (req, res) => {
-    res.send('hello client');
-    // let moviesDb = dbo.getDB();
-    // console.log(moviesDb)
+moviesRouter.get('/movies', async (req, res) => {
+    let moviesDb = dbo.getDB();
+    // res.send('hello client');
+    let moviesData = moviesDb.collection('movies');
 
-    // res.send('hello');
+    // set up query object used to query and fetch from the database
+    let query = { runtime: { $lt: 15 }};
+    
+    let options = {
+        sort: { title: 1 },
+        projection: {
+            _id: 0, 
+            title: 1, 
+            imdb: 1
+        }
+    }
 
-    // moviesDb.collection('movies')
-    //     .find({})
-    //     .toArray((err, result) => {
-    //         if(err){
-    //             console.log(err);
-    //             throw err;
-    //         }
+    /*
+     Access the Movies Collection from the "sample_mflix" database
+     and get all the movies data
+    */
+   const documents = moviesData.find(query, options);
 
-    //         res.send('hello');
-    //         console.log('hello');
-    //     })
+   await moviesData.countDocuments(query) === 0 ? res.send('no documents found') : res.send('hi');
 });
 
 module.exports = moviesRouter;
