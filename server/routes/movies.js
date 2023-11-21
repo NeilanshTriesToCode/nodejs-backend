@@ -30,9 +30,23 @@ moviesRouter.get('/movies', async (req, res) => {
      Access the Movies Collection from the "sample_mflix" database
      and get all the movies data
     */
-   const documents = moviesData.find(query, options);
+   const cursor = await moviesData.find(query, options);
 
-   await moviesData.countDocuments(query) === 0 ? res.send('no documents found') : res.send('hi');
+   /*
+    cursor contains the documents resulted from the query above.
+    To access the results, convert the cursor items to array
+    using mongoDB's built-in toArray() method, which returns a Promise
+   */
+   cursor.toArray()
+   .then((docsArray) => {
+        console.log(docsArray.length);
+        docsArray.length === 0 ? res.send('No documents found.') : res.json({ length: docsArray.length });
+   })
+   .catch(err => {
+    console.log(err);
+    res.send('An error occurred. Couldn\'t retrieve docs');
+   })
+
 });
 
 module.exports = moviesRouter;
