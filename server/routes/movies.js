@@ -15,7 +15,7 @@ moviesRouter.get('/movies', async (req, res) => {
     let moviesData = moviesDb.collection('movies');
 
     // set up query object used to query and fetch from the database
-    let query = { runtime: { $lt: 15 }};
+    let query;
     
     let options = {
         sort: { title: 1 },
@@ -24,6 +24,24 @@ moviesRouter.get('/movies', async (req, res) => {
             title: 1, 
             imdb: 1
         }
+    }
+
+    // check if the user has specified a movie name to search for
+    // if not, return all results by default
+    /*
+     NOTE: Optional parameters are accessed using req.query.parameterName and not req.params.parameterName.
+           Only for required parameters, req.params is used.
+    */
+
+    // if user has requested a specific movie title, add that to the filter
+    if(req.query.movieTitle){
+        // OBSERVE: filter has title option to only look for the title requested by the user
+        query = { title: req.query.movieTitle,  runtime: { $lt: 15 }};
+    }
+    // if not, show all results by default
+    else{
+        // OBSERVE: filter has no title option
+        query = { runtime: { $lt: 15 }};
     }
 
     /*
@@ -39,7 +57,6 @@ moviesRouter.get('/movies', async (req, res) => {
    */
    cursor.toArray()
    .then((docsArray) => {
-        console.log(docsArray.length);
         docsArray.length === 0 ? res.send('No documents found.') : res.json({ data: docsArray.slice(0, 5) ,length: docsArray.length });
    })
    .catch(err => {
