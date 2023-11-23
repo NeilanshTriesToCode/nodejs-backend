@@ -1,5 +1,5 @@
 // file containing API endpoints
-// this will have the code concerneed with the "movies" route
+// this will have the code concerned with the "movies" route
 const express = require('express');
 
 // defining movies route
@@ -10,11 +10,11 @@ const dbo = require('../db/conn');
 
 // route to retrieve all movies
 moviesRouter.get('/movies', async (req, res) => {
-    let moviesDb = dbo.getDB();
+    let moviesDb = dbo.getDB('mflix');
     // res.send('hello client');
     let moviesData = moviesDb.collection('movies');
 
-    // set up query object used to query and fetch from the database
+    // set up query object used for filters
     let query;
     
     let options = {
@@ -46,7 +46,7 @@ moviesRouter.get('/movies', async (req, res) => {
 
     /*
      Access the Movies Collection from the "sample_mflix" database
-     and get all the movies data
+     and get the movies data
     */
    const cursor = await moviesData.find(query, options);
 
@@ -56,14 +56,14 @@ moviesRouter.get('/movies', async (req, res) => {
     using mongoDB's built-in toArray() method, which returns a Promise
    */
    cursor.toArray()
-   .then((docsArray) => {
+    .then((docsArray) => {
         console.log(`Data containing ${docsArray.length} record(s) sent to the client.`);
         docsArray.length === 0 ? res.send('No documents found.') : res.json({ data: docsArray.slice(0, 5) ,length: docsArray.length });
    })
-   .catch(err => {
+    .catch(err => {
         console.log(err);
         res.send('An error occurred. Couldn\'t retrieve docs');
-   })
+   });
 
 });
 

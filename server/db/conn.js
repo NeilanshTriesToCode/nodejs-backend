@@ -6,15 +6,17 @@ const url = process.env.ATLAS_URL;
 
 const client = new MongoClient(url);
 
-var db;
+var moviesDB, analyticsDB;
 
 // function to connect to the database
 const connectToServer = () => {
     client.connect();
 
-    db = client.db('sample_mflix');
+    // connect to both DBs by default
+    moviesDB = client.db('sample_mflix');
+    analyticsDB = client.db('sample_analytics');
 
-    if(db){
+    if(moviesDB && analyticsDB){
         console.log('Connected to database.');
         return;
     }
@@ -24,10 +26,15 @@ const connectToServer = () => {
     
 }
 
-// function to return DB named "mflix" from the database
-const getDB = () => {
+// function to return either of the DBs ("sample_mflix" or "sample_analytics") from MongoDB
+const getDB = (dbName) => {
     //console.log(db)
-    return db;
+    if(dbName == 'mflix'){
+        return moviesDB;
+    }
+    else if(dbName == 'analytics'){
+        return analyticsDB;
+    }
 }
 
 module.exports = {
