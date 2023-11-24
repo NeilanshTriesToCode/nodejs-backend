@@ -15,28 +15,24 @@ const dbo = require('../db/conn');
 const customersRouter = express.Router();
 
 /*
- The GET method for this route would allow the user to view customer details with a specific id
- so the "cid" field would be required in the URL.
+ The GET method for this route would allow the user to view customer details with a specific username
+ so the "username" field would be required in the URL.
 */
-customersRouter.get('/customers/:cid', async (req, res) => {
+customersRouter.get('/customers/:username', async (req, res) => {
     // get analytics DB object
     let analyticsDB = dbo.getDB('analytics');
 
     // get "customers" Collection from the DB
     let customers = analyticsDB.collection('customers');
 
-    // extract cid from the URL and convert it to ObjectID, 
-    // which is used for storing IDs in mongodb.
+    // set up filters and option to query the Collection
     /*
-     NOTE: req.params is being used instead of req.query since cid is a required parameter.
+     NOTE: req.params is being used instead of req.query since username is a required parameter.
            This is unlike the "movies" route, whose GET method didn't have a required parameter in its URL.
            Optional parameters in the URL are accessed by req.query.parameterName.
     */
-    let customerID = new ObjectId(req.params.cid);
-
-    // set up filters and option to query the Collection
     let query = {
-        _id: customerID, // filter by customer id
+        username: req.params.username, // filter by customer username
     }
 
     let options = {};
@@ -48,7 +44,7 @@ customersRouter.get('/customers/:cid', async (req, res) => {
     cursor.toArray()
         .then(docsArray => {
             if(docsArray.length === 0){
-                res.send('No records found for this customer id. Please check the entered id.');
+                res.send('No records found for this customer username. Please check the username.');
             }
             else{
                 // record is found
