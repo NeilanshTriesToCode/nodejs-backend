@@ -5,34 +5,66 @@
 */
 const express = require('express');
 
+// convert string to ObjectID when querying is related to IDs of a document
+const { ObjectId } = require('mongodb');
+
 // import database-related stuff from conn.js
 const dbo = require('../db/conn');
 
 // defining "customers" route
-const customersRoute = express.Router();
+const customersRouter = express.Router();
 
 /*
  The GET method for this route would allow the user to view customer details with a specific id
  so the "cid" field would be required in the URL.
 */
-customersRoute.get('/customers/:cid', async (req, res) => {
+customersRouter.get('/customers/:cid', async (req, res) => {
     // get analytics DB object
     let analyticsDB = dbo.getDB('analytics');
 
     // get "customers" Collection from the DB
-    let customersData = analyticsDB.collection('customers');
+    let customers = analyticsDB.collection('customers');
 
-    // set up filters and option to query the Collection
+    // extract cid from the URL and convert it to ObjectID, 
+    // which is used for storing IDs in mongodb.
     /*
      NOTE: req.params is being used instead of req.query since cid is a required parameter.
            This is unlike the "movies" route, whose GET method didn't have a required parameter in its URL.
            Optional parameters in the URL are accessed by req.query.parameterName.
     */
+    let customerID = new ObjectId(req.params.cid);
+
+    // set up filters and option to query the Collection
     let query = {
-        cid: req.params.cid, // filter by customer id
-        runtime: { $lt: 15 }
+        _id: customerID, // filter by customer id
     }
 
     let options = {};
 
+    // get results
+    const cursor = await customers.find(query);
+
+    // extract the results as an array from the cursor
+    cursor.toArray()
+        .then(docsArray => {
+            if(docsArray.length === 0){
+                res.send('No records found for this customer id. Please check the entered id.');
+            }
+            else{
+                // record is found
+                // console.log(docsArray);
+                res.json(
+                    {
+                        ...docsArray[0]
+                    }
+                );
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.send(`An unknown error occurred: ${err}`);
+        });
+
 });
+
+module.exports = customersRouter;

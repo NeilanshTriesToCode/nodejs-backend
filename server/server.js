@@ -4,7 +4,10 @@ const cors = require('cors');
 require("dotenv").config();
 
 const dbo = require('./db/conn');
-const moviesRouter = require('./routes/movies');
+
+// importing routes/endpoints
+const moviesRouter = require('./routes/movies'); 
+const customersRouter = require('./routes/customers');
 
 const app = express();
 
@@ -25,6 +28,7 @@ app.use(express.json());
 // allows app to include routes defined in the record JS file
 // i.e. enables the routes defined in the JS file to be accessible
 app.use(moviesRouter);
+app.use(customersRouter);
 
 
 app.listen(port, () => {
