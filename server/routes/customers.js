@@ -35,7 +35,7 @@ customersRouter.get('/customers/:username', async (req, res) => {
         username: req.params.username, // filter by customer username
     }
 
-    let options = {};
+    // let options = {};
 
     // get results
     const cursor = await customers.find(query);
@@ -60,6 +60,36 @@ customersRouter.get('/customers/:username', async (req, res) => {
             console.log(err);
             res.send(`An unknown error occurred: ${err}`);
         });
+
+});
+
+// POST route to create a customer in the "customers" Collection
+customersRouter.post('/customers/add', async (req, res) => {
+    // get analytics DB object
+    let analyticsDB = dbo.getDB('analytics');
+
+    // get "customers" Collection from the DB
+    let customers = analyticsDB.collection('customers');
+
+    // extract data for the new customer
+    // NOTE: req.body.parameterName is used to access data from a POST request
+    let newCustomer = {
+        username: req.body.username,
+        name: req.body.name,
+        address: req.body.address,
+        birthdate: req.body.birthdate,
+        email: req.body.email,
+        accounts: 0, // 0 by default
+        tier_and_details: {} // empty Object by default
+    }
+
+    // create new customer, i.e., add new document to the "customers" Collection
+    customers.insertOne(newCustomer);
+});
+
+// POST route to update customer
+customersRouter.post('/customers/update/:username', async (req, res) => {
+
 
 });
 
