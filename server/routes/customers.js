@@ -98,8 +98,8 @@ customersRouter.post('/customers/add', async (req, res) => {
 });
 
 
-// POST route to update customer
-customersRouter.post('/customers/update/:username', async (req, res) => {
+// PUT route to update customer
+customersRouter.put('/customers/update/:username', async (req, res) => {
     // get analytics DB object
     let analyticsDB = await dbo.getDB('analytics');
 
@@ -136,5 +136,6 @@ customersRouter.post('/customers/update/:username', async (req, res) => {
 
 
 });
+
 
 module.exports = customersRouter;
