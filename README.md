@@ -1,2 +1,2 @@
 # nodejs-backend
-- Here is my attempt at developing a **MERN** project -> A small **node.js** REST-API with **MongoDB**.
+- A simple **node.js REST API** that allows users to read and write from 2 **MongoDB** preset databases: **sample_mflix** and **sample_customers**.
