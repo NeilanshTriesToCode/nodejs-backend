@@ -57,12 +57,12 @@ moviesRouter.get('/movies', async (req, res) => {
    */
    cursor.toArray()
     .then((docsArray) => {
-        console.log(`Data containing ${docsArray.length} record(s) sent to the client.`);
+        console.log(`\nData containing ${docsArray.length} record(s) sent to the client.`);
         docsArray.length === 0 ? res.send('No documents found.') : res.json({ data: docsArray.slice(0, 5) ,length: docsArray.length });
    })
     .catch(err => {
         console.log(err);
-        res.send('An error occurred. Couldn\'t retrieve docs');
+        res.send('\nAn error occurred. Couldn\'t retrieve docs');
    });
 
 });

@@ -84,7 +84,17 @@ customersRouter.post('/customers/add', async (req, res) => {
     }
 
     // create new customer, i.e., add new document to the "customers" Collection
-    customers.insertOne(newCustomer);
+    customers.insertOne(newCustomer)
+        .then(insertOneResult => {
+            if(insertOneResult.acknowledged){
+                console.log('\nData added to DB.');
+                res.send('\nCustomer created successfully.');
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.send(`\nAn unknown error occurred: ${err}`);
+        });
 });
 
 // POST route to update customer
