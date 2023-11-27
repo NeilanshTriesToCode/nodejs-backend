@@ -81,7 +81,7 @@ customersRouter.post('/customers/add', async (req, res) => {
         email: req.body.email,
         accounts: 0, // 0 by default
         tier_and_details: {} // empty Object by default
-    }
+    };
 
     // create new customer, i.e., add new document to the "customers" Collection
     customers.insertOne(newCustomer)
@@ -97,8 +97,42 @@ customersRouter.post('/customers/add', async (req, res) => {
         });
 });
 
+
 // POST route to update customer
 customersRouter.post('/customers/update/:username', async (req, res) => {
+    // get analytics DB object
+    let analyticsDB = await dbo.getDB('analytics');
+
+    // get "customers" Collection from the DB
+    let customers = await analyticsDB.collection('customers'); 
+
+    // filter by username
+    let options = {
+        username: req.params.username
+    }
+ 
+    // fields to update for the customer (only name and email for now)
+    // NOTE: req.body.parameterName is used to access data from a POST request
+    // NOTE: notice Object structure for updating date (notice $set)
+    let updateValues = {
+        $set: {
+            name: req.body.name,
+            email: req.body.email,
+        }
+    };
+
+    // update values
+    customers.updateOne(options, updateValues)
+        .then(updateResult => {
+            if(updateResult.acknowledged){
+                console.log('\nData updated.');
+                res.send('\nCustomer updated successfully.')
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.send(`\nAn unknown error occurred: ${err}`);
+        });
 
 
 });
