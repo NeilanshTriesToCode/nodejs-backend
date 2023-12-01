@@ -8,6 +8,7 @@ const dbo = require('./db/conn');
 // importing routes/endpoints
 const moviesRouter = require('./routes/movies'); 
 const customersRouter = require('./routes/customers');
+const writeRouter = require('./routes/write');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(express.json());
 // i.e. enables the routes defined in the JS file to be accessible
 app.use(moviesRouter);
 app.use(customersRouter);
+app.use(writeRouter);
 
 
 app.listen(port, () => {
